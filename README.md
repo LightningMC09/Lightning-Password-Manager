@@ -23,6 +23,6 @@ Certainly, here's an updated credits section that includes ChatGPT:
 
 ## Credits
 Thanks to Stack Overflow, for being awesome.
-ChatgGPT, for cleaning up my code and writing most of this readme.
+ChatGPT, for cleaning up my code and writing most of this readme.
 Google, for making finding info easy.
 And my Teacher for giving me the basics of this password manager.
