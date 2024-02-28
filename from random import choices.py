@@ -147,7 +147,6 @@ def openSettings():
 
     
     dark_mode = tk.IntVar()
-    dark_mode.set(False)
 
     def toggleDarkMode():
         dark_mode.set(not dark_mode.get())
@@ -157,7 +156,8 @@ def openSettings():
         else:
             window.configure(background='white')
     
-    dark_mode_checkbox = tk.Checkbutton(settings_window, text='Dark mode?', variable=dark_mode, onvalue=True, offvalue=False, height=1, width=10, command=toggleDarkMode)
+    dark_mode_checkbox = ttk.Checkbutton(settings_window, text='Dark mode?', variable=dark_mode, onvalue=True, offvalue=False, command=toggleDarkMode)
+    dark_mode.set(False)
     dark_mode_checkbox.pack()
 
     settings_window.mainloop()
@@ -175,23 +175,23 @@ for i in range(3):
     window.rowconfigure(i, weight=1, minsize=50)
 
     for j in range(0, 3):
-        frame = tk.Frame(
+        frame = ttk.Frame(
             master=window,
-            relief=tk.RAISED,
-            borderwidth=3
+            relief=tk.FLAT,
+            border=False
         )
 
         frame.grid(row=i, column=j, padx=5, pady=5)
         if i == 0 and j == 0:
             # Password length label and entry
-            length_label = tk.Label(master=frame, text='Length:')
+            length_label = ttk.Label(master=frame, text='Length:')
             length_label.pack(pady=6)
             # Slider for password length
-            slider = tk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
+            slider = ttk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
             slider.pack()
         elif i == 0 and j == 1:
             # Generate button
-            generate_button = tk.Button(master=frame, text='Generate', command=generatePassword)
+            generate_button = ttk.Button(master=frame, text='Generate', command=generatePassword)
             generate_button.pack(padx=5, pady=14)
             # Password label
             password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
@@ -205,18 +205,18 @@ for i in range(3):
             numbers.set(True)
             specials.set(True)
 
-            capitals_check = tk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=True, offvalue=False, height=1, width=10)
+            capitals_check = ttk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=True, offvalue=False)
             capitals_check.pack()
-            numbers_check = tk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=True, offvalue=False, height=0, width=10)
+            numbers_check = ttk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=True, offvalue=False)
             numbers_check.pack(padx=1)
-            special_check = tk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=True, offvalue=False, height=1, width=10)
+            special_check = ttk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=True, offvalue=False)
             special_check.pack()
         elif i == 1 and j == 0:
             # Entry and button to find and display a saved password
             frame.configure(borderwidth=0)
-            read_button = tk.Button(master=frame, text='Find Password:', command=readPassword)
+            read_button = ttk.Button(master=frame, text='Find Password:', command=readPassword)
             read_button.pack()
-            read_name = tk.Entry(master=frame, width=15)
+            read_name = ttk.Entry(master=frame, width=15)
             read_name.bind('<Return>', readPassword)
             read_name.pack(padx=3, pady=3)
         elif i == 1 and j == 1:
@@ -224,34 +224,34 @@ for i in range(3):
             read_password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
             read_password_label.pack_forget()
             frame.configure(borderwidth=0)
-            clear_read = tk.Button(master=frame, text='Clear Password', command=clearReadPassword)
+            clear_read = ttk.Button(master=frame, text='Clear Password', command=clearReadPassword)
             clear_read.pack_forget()
-            copy_read = tk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
+            copy_read = ttk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
             copy_read.pack_forget()
              # Button to delete a saved password
-            delete_read = tk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
+            delete_read = ttk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
             delete_read.pack_forget()
             frame.configure(borderwidth=0)
         elif i == 1 and j == 2:
             settings_icon = tk.PhotoImage(master=frame, file=icon2_filename)
-            settings_button = tk.Button(master=frame, image=settings_icon,width=35,height=35,command=openSettings)
+            settings_button = ttk.Button(master=frame, image=settings_icon,width=35,command=openSettings)
             settings_button.pack()
             frame.configure(borderwidth=0)
         elif i == 2 and j == 0:
             # Entry and button to save a generated password
             frame.configure(borderwidth=0)
-            save_button = tk.Button(master=frame, text='Save Password:', command=savePassword)
+            save_button = ttk.Button(master=frame, text='Save Password:', command=savePassword)
             save_button.pack_forget()
-            save_name = tk.Entry(master=frame, width=15)
+            save_name = ttk.Entry(master=frame, width=15)
             save_name.bind('<Return>', savePassword)
             save_name.pack_forget()
         elif i == 2 and j == 1:
             # Button to copy a generated password to clipboard
             frame.configure(borderwidth=0)
-            copy_button = tk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
+            copy_button = ttk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
             copy_button.pack_forget()
             # Button to clear a generated password
-            clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
+            clear_button = ttk.Button(master=frame, text='Clear Password', command=clearPassword)
             clear_button.pack_forget()
 
 
