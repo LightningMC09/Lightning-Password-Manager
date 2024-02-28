@@ -85,7 +85,7 @@ def savePassword(x=""):
 # Function to read a saved password from an encrypted file
 def readPassword(x=""):
     clearReadPassword()
-    padding = 90
+    padding = 40
     password_read = b64e(read_name.get().strip().lower())
     if os.path.exists(f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\cGFzc3dvcmRz\\{b64d(password_read)}'):
         pf = open(f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\cGFzc3dvcmRz\\{b64d(password_read)}', 'rb')
@@ -99,8 +99,9 @@ def readPassword(x=""):
         print(decrypted_password)
         read_password_label.insert(1.0, decrypted_password)
         read_password_label.configure(state='disabled')
-        clear_read.pack(padx=(0, padding), pady=3, side='right')
-        copy_read.pack(padx=(padding, 0), pady=3, side='left')
+        clear_read.pack(padx=(padding, 0), pady=3, side='left')
+        delete_read.pack(padx=(0, padding), pady=3, side='right')
+        copy_read.pack(pady=4,padx=3)
     else:
         tkMessageBox.showinfo(title='Error', message='Password not found! Check that you spelled it right and try again.')
 
@@ -119,19 +120,23 @@ def copyReadPassword():
 
 
 # Download the icon file from GitHub (thanks GitHub!)
-icon_directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\'
-icon_filename = icon_directory + 'icon.ico'
-def downloadIcon():
-    if not os.path.exists(icon_filename):
-        os.makedirs(os.path.dirname(icon_filename), exist_ok=True)
-        url = 'https://raw.githubusercontent.com/lightnignmc09/random-crap/main/icon.ico'
-        r = get(url)
-        with open(icon_filename, 'wb') as f:
-            f.write(r.content)
+icons_directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\YXNzZXRz\\'
+icon1_filename = icons_directory + 'icon.ico'
+icon2_filename = icons_directory + 'settings.png'
+os.makedirs(os.path.dirname(icon1_filename), exist_ok=True)
+url = 'https://raw.githubusercontent.com/lightnignmc09/Lightning-Password-Manager/main/Assets/icon.ico'
+r = get(url)
+with open(icon1_filename, 'wb') as f:
+    f.write(r.content)
+url = 'https://raw.githubusercontent.com/lightnignmc09/Lightning-Password-Manager/main/Assets/settings.png'
+r = get(url)
+with open(icon2_filename, 'wb') as f:
+    f.write(r.content)
+
 
 # Create the main window
 window = tk.Tk()
-window.iconbitmap(icon_filename)
+window.iconbitmap(icon1_filename)
 window.title('Lightning Password Manager')
 window.resizable(False, False)
 window.geometry('607x214')
@@ -195,10 +200,14 @@ for i in range(3):
             clear_read.pack_forget()
             copy_read = tk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
             copy_read.pack_forget()
-        elif i == 1 and j == 2:
-            # Button to delete a saved password
+             # Button to delete a saved password
             delete_read = tk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
             delete_read.pack_forget()
+            frame.configure(borderwidth=0)
+        elif i == 1 and j == 2:
+            settings_icon = tk.PhotoImage(master=frame, file=icon2_filename)
+            settings_button = tk.Button(master=frame, image=settings_icon,width=35,height=35)
+            settings_button.pack()
             frame.configure(borderwidth=0)
         elif i == 2 and j == 0:
             # Entry and button to save a generated password
@@ -217,6 +226,6 @@ for i in range(3):
             clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
             clear_button.pack_forget()
 
-downloadIcon()
+
 print('App launched successfully!')
 window.mainloop()
