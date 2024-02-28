@@ -1,5 +1,3 @@
-Sure, here's a shortened version of the description:
-
 ## Lightning Password Manager
 A Windows password manager i made for homework
 
@@ -18,8 +16,6 @@ Double-click `LightningPasswordManager.exe` to use.
 
 ## Contribution and License
 Open-source under GPL License. Contributions and feedback welcome.
-
-Certainly, here's an updated credits section that includes ChatGPT:
 
 ## Credits
 Thanks to Stack Overflow, for being awesome.
