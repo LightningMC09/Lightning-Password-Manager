@@ -117,9 +117,9 @@ def copyReadPassword():
     password = read_password_label.get(1.0, tk.END)
     pyperclip.copy(password)  # Copy password to clipboard
 
-# Main function
-if __name__ == '__main__':
-    # Download the icon file from GitHub (thanks GitHub!)
+
+# Download the icon file from GitHub (thanks GitHub!)
+def downloadIcon():
     directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\'
     icon_filename = directory + 'icon.ico'
     if not os.path.exists(icon_filename):
@@ -217,5 +217,6 @@ if __name__ == '__main__':
                 clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
                 clear_button.pack_forget()
 
+    downloadIcon()
     print('App launched successfully!')
     window.mainloop()
