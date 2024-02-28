@@ -123,7 +123,7 @@ if __name__ == '__main__':
     directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\'
     icon_filename = directory + 'icon.ico'
     if not os.path.exists(icon_filename):
-        os.makedirs(os.path.dirname(icon_filename) exist_ok=True)
+        os.makedirs(os.path.dirname(icon_filename), exist_ok=True)
         url = 'https://raw.githubusercontent.com/lightnignmc09/random-crap/main/icon.ico'
         r = get(url)
         with open(icon_filename, 'wb') as f:
