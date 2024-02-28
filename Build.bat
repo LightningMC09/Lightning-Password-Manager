@@ -1,0 +1,1 @@
+pyinstaller --windowed --onefile --icon icon.ico LightningPasswordManager.py
