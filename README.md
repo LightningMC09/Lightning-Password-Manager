@@ -1,9 +1,13 @@
 ## Lightning Password Manager
-A Windows password manager i made for homework
+A Windows password manager i made for homework, written in python using tkinter.
 
 ## Features
 - **Encrypted Password Storage:** Securely stores passwords with advanced encryption.
 - **Flexible Password Generation:** Customizable password length and characters.
+![image](https://github.com/lightnignmc09/Lightning-Password-Manager/assets/81399992/3165ce9e-0065-4b0c-abf6-61207124b521)
+![image](https://github.com/lightnignmc09/Lightning-Password-Manager/assets/81399992/3b2f74fb-f164-4043-aee3-04fa133e7fc2)
+
+
 
 ## Build Instructions
 1. Clone the repository.
