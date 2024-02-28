@@ -119,9 +119,9 @@ def copyReadPassword():
 
 
 # Download the icon file from GitHub (thanks GitHub!)
+icon_directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\'
+icon_filename = icon_directory + 'icon.ico'
 def downloadIcon():
-    directory = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\'
-    icon_filename = directory + 'icon.ico'
     if not os.path.exists(icon_filename):
         os.makedirs(os.path.dirname(icon_filename), exist_ok=True)
         url = 'https://raw.githubusercontent.com/lightnignmc09/random-crap/main/icon.ico'
@@ -129,94 +129,94 @@ def downloadIcon():
         with open(icon_filename, 'wb') as f:
             f.write(r.content)
 
-    # Create the main window
-    window = tk.Tk()
-    window.iconbitmap(icon_filename)
-    window.title('Lightning Password Manager')
-    window.resizable(False, False)
-    window.geometry('607x214')
+# Create the main window
+window = tk.Tk()
+window.iconbitmap(icon_filename)
+window.title('Lightning Password Manager')
+window.resizable(False, False)
+window.geometry('607x214')
 
-    # Set up the window grid
-    for i in range(3):
-        window.columnconfigure(i, weight=1, minsize=75)
-        window.rowconfigure(i, weight=1, minsize=50)
+# Set up the window grid
+for i in range(3):
+    window.columnconfigure(i, weight=1, minsize=75)
+    window.rowconfigure(i, weight=1, minsize=50)
 
-        for j in range(0, 3):
-            frame = tk.Frame(
-                master=window,
-                relief=tk.RAISED,
-                borderwidth=3
-            )
+    for j in range(0, 3):
+        frame = tk.Frame(
+            master=window,
+            relief=tk.RAISED,
+            borderwidth=3
+        )
 
-            frame.grid(row=i, column=j, padx=5, pady=5)
-            if i == 0 and j == 0:
-                # Password length label and entry
-                length_label = tk.Label(master=frame, text='Length:')
-                length_label.pack(pady=6)
-                # Slider for password length
-                slider = tk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
-                slider.pack()
-            elif i == 0 and j == 1:
-                # Generate button
-                generate_button = tk.Button(master=frame, text='Generate', command=generatePassword)
-                generate_button.pack(padx=5, pady=14)
-                # Password label
-                password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
-                password_label.pack()
-            elif i == 0 and j == 2:
-                # Checkboxes to include/exclude characters in generated password
-                capitals = tk.IntVar()
-                numbers = tk.IntVar()
-                specials = tk.IntVar()
-                capitals.set(True)
-                numbers.set(True)
-                specials.set(True)
+        frame.grid(row=i, column=j, padx=5, pady=5)
+        if i == 0 and j == 0:
+            # Password length label and entry
+            length_label = tk.Label(master=frame, text='Length:')
+            length_label.pack(pady=6)
+            # Slider for password length
+            slider = tk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
+            slider.pack()
+        elif i == 0 and j == 1:
+            # Generate button
+            generate_button = tk.Button(master=frame, text='Generate', command=generatePassword)
+            generate_button.pack(padx=5, pady=14)
+            # Password label
+            password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
+            password_label.pack()
+        elif i == 0 and j == 2:
+            # Checkboxes to include/exclude characters in generated password
+            capitals = tk.IntVar()
+            numbers = tk.IntVar()
+            specials = tk.IntVar()
+            capitals.set(True)
+            numbers.set(True)
+            specials.set(True)
 
-                capitals_check = tk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=True, offvalue=False, height=1, width=10)
-                capitals_check.pack()
-                numbers_check = tk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=True, offvalue=False, height=0, width=10)
-                numbers_check.pack(padx=1)
-                special_check = tk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=True, offvalue=False, height=1, width=10)
-                special_check.pack()
-            elif i == 1 and j == 0:
-                # Entry and button to find and display a saved password
-                frame.configure(borderwidth=0)
-                read_button = tk.Button(master=frame, text='Find Password:', command=readPassword)
-                read_button.pack()
-                read_name = tk.Entry(master=frame, width=15)
-                read_name.bind('<Return>', readPassword)
-                read_name.pack(padx=3, pady=3)
-            elif i == 1 and j == 1:
-                # Text widget to display a found password
-                read_password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
-                read_password_label.pack_forget()
-                frame.configure(borderwidth=0)
-                clear_read = tk.Button(master=frame, text='Clear Password', command=clearReadPassword)
-                clear_read.pack_forget()
-                copy_read = tk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
-                copy_read.pack_forget()
-            elif i == 1 and j == 2:
-                # Button to delete a saved password
-                delete_read = tk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
-                delete_read.pack_forget()
-                frame.configure(borderwidth=0)
-            elif i == 2 and j == 0:
-                # Entry and button to save a generated password
-                frame.configure(borderwidth=0)
-                save_button = tk.Button(master=frame, text='Save Password:', command=savePassword)
-                save_button.pack_forget()
-                save_name = tk.Entry(master=frame, width=15)
-                save_name.bind('<Return>', savePassword)
-                save_name.pack_forget()
-            elif i == 2 and j == 1:
-                # Button to copy a generated password to clipboard
-                frame.configure(borderwidth=0)
-                copy_button = tk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
-                copy_button.pack_forget()
-                # Button to clear a generated password
-                clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
-                clear_button.pack_forget()
+            capitals_check = tk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=True, offvalue=False, height=1, width=10)
+            capitals_check.pack()
+            numbers_check = tk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=True, offvalue=False, height=0, width=10)
+            numbers_check.pack(padx=1)
+            special_check = tk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=True, offvalue=False, height=1, width=10)
+            special_check.pack()
+        elif i == 1 and j == 0:
+            # Entry and button to find and display a saved password
+            frame.configure(borderwidth=0)
+            read_button = tk.Button(master=frame, text='Find Password:', command=readPassword)
+            read_button.pack()
+            read_name = tk.Entry(master=frame, width=15)
+            read_name.bind('<Return>', readPassword)
+            read_name.pack(padx=3, pady=3)
+        elif i == 1 and j == 1:
+            # Text widget to display a found password
+            read_password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
+            read_password_label.pack_forget()
+            frame.configure(borderwidth=0)
+            clear_read = tk.Button(master=frame, text='Clear Password', command=clearReadPassword)
+            clear_read.pack_forget()
+            copy_read = tk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
+            copy_read.pack_forget()
+        elif i == 1 and j == 2:
+            # Button to delete a saved password
+            delete_read = tk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
+            delete_read.pack_forget()
+            frame.configure(borderwidth=0)
+        elif i == 2 and j == 0:
+            # Entry and button to save a generated password
+            frame.configure(borderwidth=0)
+            save_button = tk.Button(master=frame, text='Save Password:', command=savePassword)
+            save_button.pack_forget()
+            save_name = tk.Entry(master=frame, width=15)
+            save_name.bind('<Return>', savePassword)
+            save_name.pack_forget()
+        elif i == 2 and j == 1:
+            # Button to copy a generated password to clipboard
+            frame.configure(borderwidth=0)
+            copy_button = tk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
+            copy_button.pack_forget()
+            # Button to clear a generated password
+            clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
+            clear_button.pack_forget()
 
-    downloadIcon()
-    print('App launched successfully!')
-    window.mainloop()
+downloadIcon()
+print('App launched successfully!')
+window.mainloop()
