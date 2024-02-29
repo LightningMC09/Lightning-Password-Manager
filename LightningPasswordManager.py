@@ -2,6 +2,7 @@ from random import choices
 from cryptography.fernet import Fernet
 from pathlib import Path
 from requests import get
+import ttkthemes
 import pyperclip
 import os
 import base64
@@ -45,10 +46,8 @@ def generatePassword():
     if specials.get():
         characters.extend('!@#$%^&*')
     password = "".join(choices(characters, k=64))[:password_length]
-    password_label.configure(state='normal')
-    password_label.delete(1.0, tk.END)
-    password_label.insert(1.0, password)
-    password_label.configure(state='disabled')
+    password_label.delete(0, tk.END)
+    password_label.insert(0, password)
 
     # Make copy button visible after generating a password
     copy_button.pack(side='left', anchor='nw')
@@ -58,18 +57,18 @@ def generatePassword():
 
 # Function to copy the generated password to the clipboard
 def copyPassword():
-    password = password_label.get(1.0, tk.END)
+    password = password_label.get()
     pyperclip.copy(password)  # Copy password to clipboard
 
 # Function to clear the generated password and buttons
 def clearPassword():
     password_label.configure(state='normal')
-    password_label.delete(1.0, tk.END)  # Clear password label
+    password_label.delete(1, tk.END)  # Clear password label
     clear_button.pack_forget()  # Hide clear button
     copy_button.pack_forget()  # Hide copy button
     save_button.pack_forget()
     save_name.pack_forget()
-    password_label.configure(state='disabled')
+    password_label.configure()
     pyperclip.copy(' ')
 
 # Function to delete a saved password
@@ -85,7 +84,7 @@ def deleteReadPassword():
 
 # Function to save the generated password as an encrypted file
 def savePassword(x=""):
-    password = password_label.get(1.0, tk.END)  # Get the password to encrypt and save
+    password = password_label.get()  # Get the password to encrypt and save
     password_name = b64e(save_name.get().strip().lower())  # Get the name to save it as (e.g., youtube)
     key = Fernet.generate_key()  # Generate key
     key_path = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\a2V5cw\\{password_name.strip("=")}'
@@ -113,11 +112,9 @@ def readPassword(x=""):
         key = kf.read()
         decrypted_password = Fernet(key).decrypt(read_password).decode()
         read_password_label.pack()
-        read_password_label.configure(state='normal')
-        read_password_label.delete(1.0, tk.END)
+        read_password_label.delete(0, tk.END)
         print(decrypted_password)
-        read_password_label.insert(1.0, decrypted_password)
-        read_password_label.configure(state='disabled')
+        read_password_label.insert(0, decrypted_password)
         clear_read.pack(padx=(padding, 0), pady=3, side='left')
         delete_read.pack(padx=(0, padding), pady=3, side='right')
         copy_read.pack(pady=4,padx=3)
@@ -134,40 +131,41 @@ def clearReadPassword():
 
 # Function to copy the read password to the clipboard
 def copyReadPassword():
-    password = read_password_label.get(1.0, tk.END)
+    password = read_password_label.get()
     pyperclip.copy(password)  # Copy password to clipboard
 
 # Function to open settings menu
 def openSettings():
-    settings_window = tk.Tk()
-    settings_window.resizable(False,False)
-    alt_settings_icon = tk.PhotoImage(file=icon2_filename ,master=settings_window)
+    global dark_mode
+    dark_mode = tk.IntVar()
+    if dark_mode is None:
+        dark_mode = tk.IntVar(value=0)
+    
+    def toggleDarkMode():
+        style.theme_use('equilux' if dark_mode.get() == 1 else 'arc')
+        window.configure(background='#464646' if dark_mode.get() == 1 else '#F5F6F7')
+        settings_window.configure(background='#464646' if dark_mode.get() == 1 else '#F5F6F7')
+        settings_window.update()
+
+    settings_window = tk.Toplevel(window)
+    settings_window.resizable(False, False)
+    alt_settings_icon = tk.PhotoImage(file=icon2_filename, master=settings_window)
     settings_window.wm_iconphoto(False, alt_settings_icon)
     settings_window.geometry('250x150')
-
-    
-    dark_mode = tk.IntVar()
-    dark_mode.set(False)
-
-    def toggleDarkMode():
-        dark_mode.set(not dark_mode.get())
-
-        if dark_mode.get():
-            window.configure(background='#414345')
-        else:
-            window.configure(background='white')
-    
-    dark_mode_checkbox = tk.Checkbutton(settings_window, text='Dark mode?', variable=dark_mode, onvalue=True, offvalue=False, height=1, width=10, command=toggleDarkMode)
+    settings_window.configure(background='#F5F6F7')
+    dark_mode_checkbox = ttk.Checkbutton(settings_window, text='Dark mode?', variable=dark_mode, onvalue=1, offvalue=0,command=toggleDarkMode)
     dark_mode_checkbox.pack()
-
-    settings_window.mainloop()
-
 # Create the main window
 window = tk.Tk()
 window.iconbitmap(icon1_filename)
 window.title('Lightning Password Manager')
 window.resizable(False, False)
 window.geometry('607x214')
+style = ttkthemes.ThemedStyle(window)
+style.theme_use('arc')
+window.configure(background='#F5F6F7')
+
+# tell tcl where to find the awthemes packages
 
 # Set up the window grid
 for i in range(3):
@@ -175,85 +173,82 @@ for i in range(3):
     window.rowconfigure(i, weight=1, minsize=50)
 
     for j in range(0, 3):
-        frame = tk.Frame(
+        frame = ttk.Frame(
             master=window,
-            relief=tk.RAISED,
-            borderwidth=3
+            relief=tk.FLAT,
+            border=False
         )
 
         frame.grid(row=i, column=j, padx=5, pady=5)
         if i == 0 and j == 0:
             # Password length label and entry
-            length_label = tk.Label(master=frame, text='Length:')
+            length_label = ttk.Label(master=frame, text='Length:')
             length_label.pack(pady=6)
             # Slider for password length
-            slider = tk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
+            slider = ttk.Scale(master=frame, from_=8, to=32, orient=tk.HORIZONTAL)
+            slider.set(12)
             slider.pack()
         elif i == 0 and j == 1:
             # Generate button
-            generate_button = tk.Button(master=frame, text='Generate', command=generatePassword)
+            generate_button = ttk.Button(master=frame, text='Generate', command=generatePassword)
             generate_button.pack(padx=5, pady=14)
             # Password label
-            password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
+            password_label = ttk.Entry(master=frame, width=48)
             password_label.pack()
         elif i == 0 and j == 2:
             # Checkboxes to include/exclude characters in generated password
-            capitals = tk.IntVar()
-            numbers = tk.IntVar()
-            specials = tk.IntVar()
-            capitals.set(True)
-            numbers.set(True)
-            specials.set(True)
+            capitals = tk.IntVar(value=1)
+            numbers = tk.IntVar(value=1)
+            specials = tk.IntVar(value=1)
 
-            capitals_check = tk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=True, offvalue=False, height=1, width=10)
+            capitals_check = ttk.Checkbutton(master=frame, text='Capitals?', variable=capitals, onvalue=1, offvalue=0)
             capitals_check.pack()
-            numbers_check = tk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=True, offvalue=False, height=0, width=10)
+            numbers_check = ttk.Checkbutton(master=frame, text='Numbers?', variable=numbers, onvalue=1, offvalue=0)
             numbers_check.pack(padx=1)
-            special_check = tk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=True, offvalue=False, height=1, width=10)
+            special_check = ttk.Checkbutton(master=frame, text='Specials?', variable=specials, onvalue=1, offvalue=0)
             special_check.pack()
         elif i == 1 and j == 0:
             # Entry and button to find and display a saved password
             frame.configure(borderwidth=0)
-            read_button = tk.Button(master=frame, text='Find Password:', command=readPassword)
+            read_button = ttk.Button(master=frame, text='Find Password:', command=readPassword)
             read_button.pack()
-            read_name = tk.Entry(master=frame, width=15)
+            read_name = ttk.Entry(master=frame, width=15)
             read_name.bind('<Return>', readPassword)
             read_name.pack(padx=3, pady=3)
         elif i == 1 and j == 1:
             # Text widget to display a found password
-            read_password_label = tk.Text(master=frame, height=1, state='disabled', width=48)
+            read_password_label = ttk.Entry(master=frame, width=48)
             read_password_label.pack_forget()
             frame.configure(borderwidth=0)
-            clear_read = tk.Button(master=frame, text='Clear Password', command=clearReadPassword)
+            clear_read = ttk.Button(master=frame, text='Clear Password', command=clearReadPassword)
             clear_read.pack_forget()
-            copy_read = tk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
+            copy_read = ttk.Button(master=frame, text='Copy to Clipboard', command=copyReadPassword)
             copy_read.pack_forget()
              # Button to delete a saved password
-            delete_read = tk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
+            delete_read = ttk.Button(master=frame, text='Delete Password', command=deleteReadPassword)
             delete_read.pack_forget()
             frame.configure(borderwidth=0)
         elif i == 1 and j == 2:
             settings_icon = tk.PhotoImage(master=frame, file=icon2_filename)
-            settings_button = tk.Button(master=frame, image=settings_icon,width=35,height=35,command=openSettings)
+            settings_button = ttk.Button(master=frame, image=settings_icon,width=35,command=openSettings)
             settings_button.pack()
             frame.configure(borderwidth=0)
         elif i == 2 and j == 0:
             # Entry and button to save a generated password
             frame.configure(borderwidth=0)
-            save_button = tk.Button(master=frame, text='Save Password:', command=savePassword)
+            save_button = ttk.Button(master=frame, text='Save Password:', command=savePassword)
             save_button.pack_forget()
-            save_name = tk.Entry(master=frame, width=15)
+            save_name = ttk.Entry(master=frame, width=15)
             save_name.bind('<Return>', savePassword)
             save_name.pack_forget()
         elif i == 2 and j == 1:
             # Button to copy a generated password to clipboard
             frame.configure(borderwidth=0)
-            copy_button = tk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
+            copy_button = ttk.Button(master=frame, text='Copy to Clipboard', command=copyPassword)
             copy_button.pack_forget()
             # Button to clear a generated password
-            clear_button = tk.Button(master=frame, text='Clear Password', command=clearPassword)
+            clear_button = ttk.Button(master=frame, text='Clear Password', command=clearPassword)
             clear_button.pack_forget()
-
 
 print('App launched successfully!')
 window.mainloop()
