@@ -156,8 +156,10 @@ def copyReadPassword():
 def checkDarkMode():
     global dark_mode
     dark_mode = tk.IntVar()
-    with open(f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\dark.mode','r') as f: # Open the file to read it
-        dark_mode.set(int(f.read())) # Set dark_mode to the contents of the file
+    dark_file = f'{os.getenv("APPDATA")}\\TGlnaHRuaW5nTUMwOQ\\dark.mode'
+    if os.path.exists(dark_file):
+        with open(dark_file,'r') as f: # Open the file to read it
+            dark_mode.set(int(f.read())) # Set dark_mode to the contents of the file
     style.theme_use('equilux' if dark_mode.get() == 1 else 'arc') # Set the ttk theme based on dark_mode
     window.configure(background='#464646' if dark_mode.get() == 1 else '#F5F6F7') # Set the window background as well, as it not a ttk widget
 
